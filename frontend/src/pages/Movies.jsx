@@ -50,7 +50,20 @@ const Movies = () => {
                             <h2>{movie.title}</h2>
                             <p>{movie.genre}</p>
                             <p>{movie.description}</p>
-                            <p>Created by: {movie.createdBy?.firstName} {movie.createdBy?.lastName}</p>
+                            {movie.image ? (
+   <img 
+       src={`http://localhost:5000/${movie.image}`} 
+       alt={movie.title} 
+       style={{ width: '200px', height: 'auto' }} 
+   />
+) : (
+   <img 
+       src="/path/to/placeholder-image.jpg" 
+       alt="placeholder" 
+       style={{ width: '200px', height: 'auto' }} 
+   />
+)}
+
                         </li>
                     ))}
                 </ul>

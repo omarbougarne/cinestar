@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import Movies from './pages/Movies'; 
+import AddMovie from './pages/AddMovies'; 
 
 function App() {
     const isUserSignedIn = !!localStorage.getItem('token');
@@ -14,7 +15,8 @@ function App() {
             <Routes>
                 <Route path='/login' element={<Login />} />
                 <Route path='/signup' element={<SignUp />} />
-                <Route path='/movies' element={isUserSignedIn ? <Movies /> : <Navigate to='/login' />} /> {/* Protect Movies */}
+                <Route path='/movies' element={isUserSignedIn ? <Movies /> : <Navigate to='/login' />} /> 
+                {isUserSignedIn && <Route path='/add-movie' element={<AddMovie />} />}
             </Routes>
         </div>
     );

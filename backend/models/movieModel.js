@@ -12,7 +12,7 @@ const movieSchema = new mongoose.Schema({
     comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
     videoUrl: { type: String, required: true },
     imageUrl: { type: String, required: true },  
-    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
+    // createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
 });
 
 
@@ -27,7 +27,7 @@ const validateMovie = (movie) => {
         releaseDate: Joi.date().required(),
         videoUrl: Joi.string().uri().required(),   
         imageUrl: Joi.string().uri().required(),  
-        createdBy: Joi.objectId().required(),  
+        // createdBy: Joi.objectId().required(),  
         rating: Joi.number().min(0).max(10).optional(),
         comments: Joi.array().items(Joi.objectId()).optional()
     });

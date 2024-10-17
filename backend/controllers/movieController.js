@@ -1,10 +1,12 @@
+
+const cloudinary = require('../config/cloudinary');
 const { Movie, validateMovie } = require('../models/movieModel');
 const mongoose = require('mongoose');
 
 
 const getMovies = async (req, res) => {
     try {
-        const movies = await Movie.find().populate('createdBy', 'username'); 
+        const movies = await Movie.find(); 
         res.status(200).send(movies);
     } catch (err) {
         res.status(500).send({ message: 'Error fetching movies' });
@@ -15,30 +17,33 @@ const getMovies = async (req, res) => {
 
 
 const createMovie = async (req, res) => {
-    
-    const { error } = validateMovie(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
-
-    
-    const movie = new Movie({
-        title: req.body.title,
-        genre: req.body.genre,
-        description: req.body.description,
-        releaseDate: req.body.releaseDate,
-        rating: req.body.rating,
-        videoUrl: req.body.videoUrl,
-        imageUrl: req.body.imageUrl,
-        createdBy: req.user._id 
-    });
-
     try {
         
-        await movie.save();
-        res.status(201).send(movie);
-    } catch (err) {
-        res.status(500).send('Server error');
+        if (!req.file) {
+            return res.status(400).json({ message: 'Image is required' });
+        }
+
+        
+        const { title, genre, description, releaseDate, videoUrl } = req.body;
+
+        
+        const newMovie = {
+            title,
+            genre,
+            description,
+            releaseDate,
+            videoUrl,
+            imageUrl: req.file.path
+        };
+
+        
+        const savedMovie = await Movie.create(newMovie);
+        res.status(201).json(savedMovie);
+    } catch (error) {
+        res.status(500).json({ message: 'Error creating movie', error });
     }
 };
+
 
 
 
