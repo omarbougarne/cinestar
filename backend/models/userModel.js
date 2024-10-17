@@ -15,7 +15,11 @@ const userSchema = new mongoose.Schema({
     timestamps: true
 });
 
-
+userSchema.methods.generateAuthToken = function () {
+    const token = jwt.sign({ _id: this._id, email: this.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    return token;
+};
+const User = mongoose.model('User', userSchema);
 const validateUser = (user, isUpdate = false) => {
     const schema = Joi.object({
         firstName: Joi.string().min(3).max(50).required(),
@@ -27,12 +31,12 @@ const validateUser = (user, isUpdate = false) => {
 };
 
 
-userSchema.methods.generateAuthToken = function () {
-    return jwt.sign({ _id: this._id, role: this.role }, process.env.JWT_SECRET);
-};
 
-module.exports = mongoose.model('User', userSchema);
-module.exports.validateUser = validateUser;
+module.exports = {
+    User,
+    validateUser
+
+}
 
 
 

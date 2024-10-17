@@ -1,51 +1,42 @@
 const mongoose = require('mongoose');
 const Joi = require('joi');
-const jwt = require('jsonwebtoken');
+Joi.objectId = require('joi-objectid')(Joi);  
 
 
-const userSchema = new mongoose.Schema({
-  firstName: { type: String, required: true },
-  lastName: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true }, 
-  role: { type: String, enum: ['subscribed', 'basic'], default: 'subscribed' },  
-  
-},
-{
-    timestamps: true
+const movieSchema = new mongoose.Schema({
+    title: { type: String, required: true },
+    genre: { type: String, required: true },
+    description: { type: String },
+    releaseDate: { type: Date, required: true },
+    rating: { type: Number, default: 0 },
+    comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
+    videoUrl: { type: String, required: true },
+    imageUrl: { type: String, required: true },  
+    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
 });
 
 
-const validateUser = (user, isUpdate = false) => {
+const Movie = mongoose.model('Movie', movieSchema);
+
+
+const validateMovie = (movie) => {
     const schema = Joi.object({
-        firstName: Joi.string().min(3).max(50).required(),
-        lastName: Joi.string().min(3).max(50).required(),
-        email: Joi.string().email().required(),
-        password: isUpdate ? Joi.string().optional() : Joi.string().min(5).required()
+        title: Joi.string().min(3).max(255).required(),
+        genre: Joi.string().min(3).max(100).required(),
+        description: Joi.string().max(1000).optional(),
+        releaseDate: Joi.date().required(),
+        videoUrl: Joi.string().uri().required(),   
+        imageUrl: Joi.string().uri().required(),  
+        createdBy: Joi.objectId().required(),  
+        rating: Joi.number().min(0).max(10).optional(),
+        comments: Joi.array().items(Joi.objectId()).optional()
     });
-    return schema.validate(user);
+
+    return schema.validate(movie);
 };
 
 
-userSchema.methods.generateAuthToken = function () {
-    return jwt.sign({ _id: this._id, role: this.role }, process.env.JWT_SECRET);
+module.exports = {
+    Movie,
+    validateMovie
 };
-
-module.exports = mongoose.model('User', userSchema);
-module.exports.validateUser = validateUser;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//   favoriteMovies: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Movie' }],  

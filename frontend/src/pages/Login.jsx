@@ -29,7 +29,6 @@ function Login() {
             .post('http://localhost:5000/api/auth/login', { email, password })
             const token = response.data.token
             alert('Login successful')
-            setUsername('')
             setPassword('')
             fetchUsers();
             navigate('/account')
