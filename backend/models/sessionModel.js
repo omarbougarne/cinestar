@@ -53,8 +53,9 @@ const validateSession = (data) => {
         roomId: Joi.string().hex().length(24).required().label('Room ID'),
         startTime: Joi.date().iso().required().label('Start Time'),
         endTime: Joi.date().iso().required().greater(Joi.ref('startTime')).label('End Time'),
-        createdBy: Joi.string().hex().length(24).required().label('Created By'),  
-        isAllowed: Joi.boolean().required().label('Is Allowed')  
+        createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        isAllowed: Joi.boolean().default(true).label('Is Allowed')
+        // createdBy: Joi.string().hex().length(24).required().label('Created By'),  
     });
 
     return schema.validate(data);

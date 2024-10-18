@@ -1,4 +1,3 @@
-// src/App.jsx
 import { Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 import Navbar from './components/Navbar';
@@ -7,7 +6,8 @@ import SignUp from './pages/SignUp';
 import Movies from './pages/Movies'; 
 import AddMovie from './pages/AddMovies';
 import RoomList from './pages/RoomList'; 
-import SessionList from './pages/SessionList'; // Import the new SessionList component
+import SessionList from './pages/SessionList'; 
+import AddSession from './pages/AddSession'; 
 
 function App() {
     const isUserSignedIn = !!localStorage.getItem('token');
@@ -23,7 +23,8 @@ function App() {
                     <>
                         <Route path='/add-movie' element={<AddMovie />} />
                         <Route path='/rooms' element={<RoomList />} /> 
-                        <Route path='/sessions' element={<SessionList />} /> {/* Added route for sessions */}
+                        <Route path='/sessions' element={<SessionList />} /> 
+                        <Route path='/add-session' element={<AddSession />} /> 
                         {/* <Route path='/add-room' element={<AddRoom />} />  */}
                     </>
                 )}
