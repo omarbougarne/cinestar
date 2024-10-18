@@ -8,8 +8,8 @@ const movieSchema = new mongoose.Schema({
     genre: { type: String, required: true },
     description: { type: String },
     releaseDate: { type: Date, required: true },
-    rating: { type: Number, default: 0 },
     comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
+    ratings: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Rating' }],
     videoUrl: { type: String, required: true },
     imageUrl: { type: String, required: true },  
     // createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
