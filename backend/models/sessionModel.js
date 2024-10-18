@@ -1,16 +1,15 @@
 const mongoose = require('mongoose');
 const Joi = require('joi');
 
-
 const sessionSchema = new mongoose.Schema({
     movie: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Movie',  
+        ref: 'Movie',
         required: true
     },
     room: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Room',   
+        ref: 'Room',
         required: true
     },
     startTime: {
@@ -23,28 +22,30 @@ const sessionSchema = new mongoose.Schema({
     },
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',  
-        required: true
+        ref: 'User',
+        required: true  
     },
     isActive: {
+        type: Boolean,
+        default: true
+    },
+    isAllowed: {
         type: Boolean,
         default: true  
     }
 });
-
 
 sessionSchema.post('save', function () {
     const session = this;
     setTimeout(async () => {
         const now = new Date();
         if (session.endTime <= now) {
-            await markRoomAsAvailable(session);  
-            session.isActive = false;  
+            await markRoomAsAvailable(session);
+            session.isActive = false;
             await session.save();
         }
-    }, session.endTime - session.startTime);  
+    }, session.endTime - session.startTime);
 });
-
 
 const validateSession = (data) => {
     const schema = Joi.object({
@@ -52,11 +53,12 @@ const validateSession = (data) => {
         roomId: Joi.string().hex().length(24).required().label('Room ID'),
         startTime: Joi.date().iso().required().label('Start Time'),
         endTime: Joi.date().iso().required().greater(Joi.ref('startTime')).label('End Time'),
+        createdBy: Joi.string().hex().length(24).required().label('Created By'),  
+        isAllowed: Joi.boolean().required().label('Is Allowed')  
     });
 
     return schema.validate(data);
 };
-
 
 const Session = mongoose.model('Session', sessionSchema);
 

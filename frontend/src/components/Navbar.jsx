@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -18,7 +17,9 @@ function Navbar() {
                 {isUserSignedIn ? (
                     <>
                         <Link to='/account'><li>Account</li></Link>
-                        <Link to='/add-movie'><li>Add Movie</li></Link> 
+                        <Link to='/add-movie'><li>Add Movie</li></Link>
+                        <Link to='/rooms'><li>Show Rooms</li></Link>
+                        <Link to='/sessions'><li>Show Sessions</li></Link> {/* Added link for Show Sessions */}
                         <li><button onClick={handleSignOut}>Sign Out</button></li>
                     </>
                 ) : (

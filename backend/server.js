@@ -4,6 +4,8 @@ const dotenv = require("dotenv");
 const cors = require('cors');
 const authRoutes = require('./routes/auth.routes');
 const movieRoutes = require('./routes/movie.routes');
+const roomRoutes = require('./routes/room.routes');
+const sessionRoutes = require('./routes/session.routes');
 const path = require('path')
 dotenv.config();
 connectDB()
@@ -18,4 +20,6 @@ app.use(cors());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api/auth', authRoutes);
 app.use('/api/movies', movieRoutes);
+app.use('/api/rooms', roomRoutes);
+app.use('/api/sessions', sessionRoutes);
 app.listen(port, () => console.log(`Server started on port ${port}`));
